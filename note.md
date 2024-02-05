@@ -911,3 +911,66 @@ A 叉乘 B === -(B 叉乘 A)
 |A| * |H| = 平行四边形面积
 
 所以 | A 叉乘 B | = AB 组成的平行四边形的面积
+
+# 27. 灯光原理
+
+材质决定了物体与灯光的作用。
+
+- 漫反射：
+
+  与灯光的入射角有关系，跟观察角无关。即在同一时刻，无论站在哪个角度，观察到的漫反射应该都是相同的。
+
+- 镜面反射：
+
+  跟入射角有关，也跟观察角有关。
+
+任何一个物体都不是只有漫反射或单一镜面反射的，都是由两者组合而成的。
+
+L：灯光入射角；N：顶点法线；E：观察角；
+
+漫反射：Dot(L, N) * 灯光的颜色
+
+Dot(L, N) = | L | * | N | * cos(q)
+
+镜面反射：
+
+L：灯光入射角；N：顶点法线；E：观察角；R：灯光反射角；
+
+Phone 式模型：R dot E
+
+BilingPhone：(E-L) dot N === H dot N
+
+(E - L) = H
+
+镜面反射颜色 = 镜面反射 * 灯光的颜色 * 衰减值
+
+物体颜色 = 镜面反射颜色 + 漫反射颜色 + 自发光 + 环境光
+
+# 28. 自定义光照模型
+
+Unity 5.4 以前
+
+```glsl
+half4 Lighting<Name> (SurfaceOutput s, half3 lightDir, half atten);
+
+half4 Lighting<Name> (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten);
+
+half4 Lighting<Name>_PrePass (SurfaceOutput s, half4 light);
+```
+
+Unity 5.5 开始
+
+```glsl
+// 1
+half4 Lighting<Name> (SurfaceOutput s, UnityGI gi);
+
+// 2
+half4 Lighting<Name> (SurfaceOutput s, half3 viewDir, UnityGI gi);
+
+// 3
+half4 Lighting<Name>_Deferred (SurfaceOutput s, UnityGI gi, out half4 outDiffuseOcclusion, out half4 outSpecSmoothness, out half4 outNormal);
+
+// 4
+half4 Light<Name>_PrePass (SurfaceOutput s, half4 light);
+```
+
