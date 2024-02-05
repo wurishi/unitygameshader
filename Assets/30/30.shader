@@ -1,10 +1,11 @@
-Shader "Custom/29"
+Shader "Custom/30"
 {
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Normal ("Normal", 2D) = "white" {}
+        _A ("A", Float) = 2.0
     }
     SubShader
     {
@@ -25,9 +26,12 @@ Shader "Custom/29"
         {
             float2 uv_MainTex;
             float2 uv_Normal;
+
+            float3 viewDir;
         };
 
         fixed4 _Color;
+        float _A;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -40,9 +44,13 @@ Shader "Custom/29"
         {
             // Albedo comes from a texture tinted by color
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-
-            o.Normal = UnpackNormal(tex2D(_Normal, IN.uv_Normal)); // 从 (0, 1) 的取值范围转换成 (-1, 1)
             o.Albedo = c.rgb;
+
+            // float3 tmpNormal = UnpackNormal(tex2D(_Normal, IN.uv_Normal));
+            float3 tmpNormal = tex2D(_Normal, IN.uv_Normal);
+            o.Normal = tmpNormal;
+            float tmpFloat = 1 - clamp(dot(IN.viewDir, tmpNormal), 0, 1);
+            o.Emission = _Color * pow(tmpFloat , _A);
             // Metallic and smoothness come from slider variables
             o.Alpha = c.a;
         }
