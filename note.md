@@ -974,3 +974,15 @@ half4 Lighting<Name>_Deferred (SurfaceOutput s, UnityGI gi, out half4 outDiffuse
 half4 Light<Name>_PrePass (SurfaceOutput s, half4 light);
 ```
 
+# 29. 法线贴图原理
+
+法线贴图的作用：
+
+增加明暗对比度。cos(q) 角度越大，值越小。
+
+由于法线的取值范围是 (-0.5 - 0.5)，然后图片的通道都是 0-1，所以还需要进行一次转换：
+
+```glsl
+UnpackNormal() // 从 0 - 1 的取值范围转换成 -0.5 - 0.5
+```
+
