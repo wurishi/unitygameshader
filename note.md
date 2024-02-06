@@ -1040,3 +1040,54 @@ void FinalColor(Input IN, SurfaceOutput o, inout fixed4 color)
 }
 ```
 
+线性：
+$$
+f=\frac{d_{max}-|z|}{d_{max}-d_{min}}
+\\
+d_{max}和d_{min}分别表示受雾影响的距离起点和终点
+$$
+
+
+一次指数：
+$$
+f = e^{-d|z|}
+\\
+z 表示 距离摄像机的远近
+\\
+e=2.7182818
+$$
+二次指数：
+$$
+f=e^{-(dz)^2}
+\\
+d表示雾的浓度
+$$
+
+# 35. brdf （双向反射分布函数）
+
+BRDF（Bidirectional Reflectance Distribution Function）双向反射分布函数。
+
+该函数描述了入射光线在非透明物体表面如何进行反射。它计算的是特定反射方向的光强与入射光强的比例。
+
+各向异性（anisotropy）与均向性相反。是指在不同方向具有不同行为的性质，也就是其行为与方向有关。如在物理学上，沿着材料做不同方向的量测，若会出现不同行为，通常称该材料具有某种“各向异性”，这样的材质表面称为各向异性表面（anisotropic surface）。
+
+```glsl
+// L 为光线方向；N 为法线方向；V：相机观察方向；R：反射方向；H 为半角向量，在 L 和 V 的中间；
+```
+
+分布函数：
+$$
+D_{pl}(h) = \frac{a+2}{8}(n∙h)^a
+$$
+Schlick 提出的 fresnel 方法：
+$$
+F(l, h) = rf_0 + (1 - rf_0)(1-h∙l)^5
+\\
+rf_0 是反射颜色，也是 roughness 粗糙程度。
+$$
+遮挡项使用 Schlick-Smith 提出的方法：
+$$
+k=\frac{2}{\sqrt{π(a+2)}}
+\\
+V(l, v, h) = \frac{1}{((n∙l)(l-k)+k)((n∙v)(1-k)+k)}
+$$
