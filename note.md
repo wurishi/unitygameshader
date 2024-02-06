@@ -1017,3 +1017,15 @@ float3 refract (float3 I, float3 N, float etaRatio) {
 }
 ```
 
+# 33. fresnel （菲尼尔）
+
+描述多少光被反射，多少被折射。用来渲染一种类似瓷砖表面有釉的那种感觉，或者木头表面清漆的效果。
+
+```glsl
+// fresnelBias 偏移系数
+// fresnelScale 缩放系数
+// fresnelPower 菲尼尔指数
+reflectFactor = fresnelBias + fresnelScale * pow(1 + dot(viewDir, N), fresnelPower);
+C(fresnelFinal) = reflectFact * C(reflect) + (1 - reflectFact) * C(refract);
+```
+
