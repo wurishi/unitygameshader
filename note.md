@@ -994,3 +994,26 @@ UnpackNormal() // 从 (0, 1) 的取值范围转换成 (-1, 1)
 
 真反射：消耗性能，通过另外添加Camera，让 Camera.TargetTexture 指向一个单独的 RenderTexture。物体的材质使用这张 RenderTexture 实现真反射。
 
+# 32. 折射
+
+反射：
+
+```glsl
+// N: 法线
+// I: 灯光入射角
+float3 reflect (float3 I, float3 N) {
+    return I - 2.0 * N * dot(N, I);
+}
+```
+
+折射：
+
+```glsl
+float3 refract (float3 I, float3 N, float etaRatio) {
+    float cosI = dot(-I, N);
+    float cosI2 = 1.0f - etaRatio * etaRatio * (1.0f - cosI * cosI);
+    float3 T = etaRatio * I + ((etaRatio * cosI - sqrt(abs(cosI2))) * N);
+    return T * (float3)(cosI2 > 0);
+}
+```
+
