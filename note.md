@@ -1029,3 +1029,14 @@ reflectFactor = fresnelBias + fresnelScale * pow(1 + dot(viewDir, N), fresnelPow
 C(fresnelFinal) = reflectFact * C(reflect) + (1 - reflectFact) * C(refract);
 ```
 
+# 34. fog
+
+```glsl
+#pragma surface surf Lambert vertex:MyVertex finalcolor:FinalColor
+    
+void FinalColor(Input IN, SurfaceOutput o, inout fixed4 color)
+{
+    color = lerp(float4(1, 0, 0, 1), color, IN.fogData);
+}
+```
+
