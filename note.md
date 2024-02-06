@@ -988,3 +988,9 @@ UnpackNormal() // 从 (0, 1) 的取值范围转换成 (-1, 1)
 
 # 30. 边缘检测
 
+# 31. Cubemap
+
+通过菜单 Create -> Legacy -> Cubemap 创建
+
+真反射：消耗性能，通过另外添加Camera，让 Camera.TargetTexture 指向一个单独的 RenderTexture。物体的材质使用这张 RenderTexture 实现真反射。
+
